@@ -2,7 +2,10 @@ const buttonAll = document.getElementById("btn-all");
 const buttonActive = document.getElementById("btn-active");
 const buttonInactive = document.getElementById("btn-inactive");
 const extensionsDiv = document.querySelector(".extensions");
-const words = "Hello";
+const toggleColorSchemeButton = document.getElementById(
+  "btn-toggle-color-scheme"
+);
+const toggleBtnBGDiv = document.querySelector(".toggle-btn-bgdiv");
 
 window.onload = async function getData() {
   const url = "data.json";
@@ -36,7 +39,6 @@ window.onload = async function getData() {
         '<span class="slider round"></span>' +
         "</label>" +
         "</div>" +
-        "</div>" +
         "</div>";
     });
     checkStatus();
@@ -46,15 +48,23 @@ window.onload = async function getData() {
 };
 function checkStatus() {
   const cards = document.querySelectorAll(".extension");
+  const removeBtn = document.querySelectorAll(".btn-remove");
   const checkedBoxes = [];
-  console.log(cards);
+
+  removeBtn.forEach((btn) => {
+    btn.addEventListener("click", removeExtension);
+
+    function removeExtension() {
+      this.parentNode.parentNode.style.display = "none";
+    }
+  });
   cards.forEach((card) => {
     buttonActive.addEventListener("click", showActive);
     buttonAll.addEventListener("click", showAll);
     buttonInactive.addEventListener("click", showInactive);
-    console.log(card);
+
     function showAll() {
-      card.style.display = "block";
+      card.style.display = "flex";
     }
     function showActive() {
       resetCards();
@@ -69,7 +79,7 @@ function checkStatus() {
       }
     }
     function resetCards() {
-      card.style.display = "block";
+      card.style.display = "flex";
     }
 
     card.childNodes[1].childNodes[1].childNodes[0].addEventListener(
@@ -80,14 +90,76 @@ function checkStatus() {
       card.childNodes[1].childNodes[1].childNodes[0].checked =
         card.childNodes[1].childNodes[1].childNodes[0].checked;
 
-      console.log("clicked");
-      console.log(card.childNodes[1].childNodes[1].childNodes[0].checked);
       if (card.childNodes[1].childNodes[1].childNodes[0].checked === true) {
         checkedBoxes.push(card);
       } else {
-        checkedBoxes.pop(card);
+        const index = checkedBoxes.indexOf(card);
+        if (index > -1) {
+          // only splice array when item is found
+          checkedBoxes.splice(index, 1); // 2nd parameter means remove one item only
+        }
       }
+
+      console.log("clicked");
+      console.log(checkedBoxes);
     }
   });
 }
-doStuff();
+toggleBtnBGDiv.addEventListener("click", toggleColorScheme);
+
+function toggleColorScheme() {
+  const cards = document.querySelectorAll(".extension");
+  const selectBtns = document.querySelectorAll(".btn-select");
+  const removeBtns = document.querySelectorAll(".btn-remove");
+  const header = document.getElementById("header");
+  const headerLogo = document.querySelector(".logo-text");
+  const headerImage = document.querySelector(".logo-image");
+
+  if (toggleColorSchemeButton.classList.contains("light")) {
+    toggleColorSchemeButton.classList.remove("light");
+    document.body.style.backgroundColor = "var(--clr-neutral-900)";
+    document.body.style.color = "white";
+    header.style.backgroundColor = "var(--clr-neutral-700)";
+    headerLogo.style.fill = "#FFF";
+    headerImage.style.fill = "var(--clr-red-400)";
+    toggleColorSchemeButton.src = "assets/images/icon-sun.svg";
+    toggleBtnBGDiv.style.backgroundColor = "var(--clr-neutral-600)";
+    cards.forEach((card) => {
+      card.style.backgroundColor = "var(--clr-neutral-800)";
+      card.style.border = "1px solid var(--clr-neutral-600)";
+      card.style.color = "var(--clr-neutral-300)";
+    });
+    selectBtns.forEach((btn) => {
+      btn.style.setProperty("--bg-color", "var(--clr-neutral-800");
+      btn.style.setProperty("--border", "1px solid var(--clr-neutral-600)");
+      btn.style.setProperty("--color", "var(--clr-neutral-300)");
+    });
+    removeBtns.forEach((btn) => {
+      btn.style.backgroundColor = "transparent";
+      btn.style.border = "1px solid var(--clr-neutral-600)";
+    });
+  } else {
+    toggleColorSchemeButton.classList.add("light");
+    document.body.style.backgroundColor = "var(--clr-neutral-300)";
+    document.body.style.color = "black";
+    header.style.backgroundColor = "var(--clr-neutral-100)";
+    headerLogo.style.fill = "var(--clr-neutral-900)";
+    headerImage.style.fill = "var(--clr-red-700)";
+    toggleColorSchemeButton.src = "assets/images/icon-moon.svg";
+    toggleBtnBGDiv.style.backgroundColor = "var(--clr-neutral-200)";
+    cards.forEach((card) => {
+      card.style.backgroundColor = "var(--clr-neutral-100)";
+      card.style.border = "none";
+      card.style.color = "black";
+    });
+    selectBtns.forEach((btn) => {
+      btn.style.setProperty("--bg-color", "var(--clr-neutral-100");
+      btn.style.setProperty("--border", "1px solid var(--clr-neutral-400)");
+      btn.style.setProperty("--color", "black");
+    });
+    removeBtns.forEach((btn) => {
+      btn.style.backgroundColor = "var(--clr-red-700)";
+      btn.style.border = "none";
+    });
+  }
+}
