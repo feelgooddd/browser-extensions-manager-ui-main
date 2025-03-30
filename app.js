@@ -15,6 +15,7 @@ window.onload = async function getData() {
       throw new Error(`Response status: ${response.status}`);
     }
     const data = await response.json();
+    //populate the page with the cards inside the extensionsDiv
     data.forEach((data) => {
       extensionsDiv.innerHTML =
         extensionsDiv.innerHTML +
@@ -41,6 +42,8 @@ window.onload = async function getData() {
         "</div>" +
         "</div>";
     });
+    //main function that handles if an extension is toggled
+    //as active or inactive.
     checkStatus();
   } catch (error) {
     console.log(error.message);
@@ -49,16 +52,26 @@ window.onload = async function getData() {
 function checkStatus() {
   const cards = document.querySelectorAll(".extension");
   const removeBtn = document.querySelectorAll(".btn-remove");
+  //checkedBoxes array which will be populated with extensions that
+  //are active.
   const checkedBoxes = [];
 
+  //the remove Button within each card
   removeBtn.forEach((btn) => {
     btn.addEventListener("click", removeExtension);
 
     function removeExtension() {
+      //parentNode.parentNode is the card itself which contains the button
+      // so change its display to none when remove is clicked.
       this.parentNode.parentNode.style.display = "none";
     }
   });
+
   cards.forEach((card) => {
+    //event listeners and functions to handle
+    //the All/Active/Inactive Buttons and display
+    //the cards depending if they are in the checkedBoxes Array
+    //or not.
     buttonActive.addEventListener("click", showActive);
     buttonAll.addEventListener("click", showAll);
     buttonInactive.addEventListener("click", showInactive);
@@ -67,29 +80,29 @@ function checkStatus() {
       card.style.display = "flex";
     }
     function showActive() {
-      resetCards();
+      showAll();
       if (!checkedBoxes.includes(card)) {
         card.style.display = "none";
       }
     }
     function showInactive() {
-      resetCards();
+      showAll();
       if (checkedBoxes.includes(card)) {
         card.style.display = "none";
       }
     }
-    function resetCards() {
-      card.style.display = "flex";
-    }
 
+    //event listener to listen to the checkbox/togglebutton
+    //which listens for a change and then calls function checkIt
     card.childNodes[1].childNodes[1].childNodes[0].addEventListener(
       "change",
       checkIt
     );
-    function checkIt() {
-      card.childNodes[1].childNodes[1].childNodes[0].checked =
-        card.childNodes[1].childNodes[1].childNodes[0].checked;
 
+    //check if the cards toggle is true or false
+    //and then push it to the array of active cards
+    //otherwise remove it from the aray.
+    function checkIt() {
       if (card.childNodes[1].childNodes[1].childNodes[0].checked === true) {
         checkedBoxes.push(card);
       } else {
@@ -99,12 +112,14 @@ function checkStatus() {
           checkedBoxes.splice(index, 1); // 2nd parameter means remove one item only
         }
       }
-
+      //debugging logs
       console.log("clicked");
       console.log(checkedBoxes);
     }
   });
 }
+
+//handle light and dark mode.
 toggleBtnBGDiv.addEventListener("click", toggleColorScheme);
 
 function toggleColorScheme() {
@@ -114,7 +129,7 @@ function toggleColorScheme() {
   const header = document.getElementById("header");
   const headerLogo = document.querySelector(".logo-text");
   const headerImage = document.querySelector(".logo-image");
-
+  //light mode colour scheme.
   if (toggleColorSchemeButton.classList.contains("light")) {
     toggleColorSchemeButton.classList.remove("light");
     document.body.style.backgroundColor = "var(--clr-neutral-900)";
@@ -130,6 +145,11 @@ function toggleColorScheme() {
       card.style.color = "var(--clr-neutral-300)";
     });
     selectBtns.forEach((btn) => {
+      //using properties instead of directly editing the styles
+      //to prevent adding in-line styles to the html
+      //instead change the properties within the stylesheet
+      //otherwise hover and focus effects will not work
+      //since they are overwritten by inline styles.
       btn.style.setProperty("--bg-color", "var(--clr-neutral-800");
       btn.style.setProperty("--border", "1px solid var(--clr-neutral-600)");
       btn.style.setProperty("--color", "var(--clr-neutral-300)");
@@ -138,6 +158,7 @@ function toggleColorScheme() {
       btn.style.backgroundColor = "transparent";
       btn.style.border = "1px solid var(--clr-neutral-600)";
     });
+    //dark mode colour scheme.
   } else {
     toggleColorSchemeButton.classList.add("light");
     document.body.style.backgroundColor = "var(--clr-neutral-300)";
@@ -153,6 +174,11 @@ function toggleColorScheme() {
       card.style.color = "black";
     });
     selectBtns.forEach((btn) => {
+      //using properties instead of directly editing the styles
+      //to prevent adding in-line styles to the html
+      //instead change the properties within the stylesheet
+      //otherwise hover and focus effects will not work
+      //since they are overwritten by inline styles.
       btn.style.setProperty("--bg-color", "var(--clr-neutral-100");
       btn.style.setProperty("--border", "1px solid var(--clr-neutral-400)");
       btn.style.setProperty("--color", "black");
