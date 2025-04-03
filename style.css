@@ -74,47 +74,47 @@ main {
   border-radius: 20px;
 }
 .btn-group button:active,
-.btn-group button:focus {
+.btn-group button:focus,
+.btn-group button:hover {
   --bg-color-hover: var(--clr-red-500);
   background-color: var(--bg-color-hover);
 }
 .extensions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-
   gap: 2rem;
 }
 .extension {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   justify-content: center;
-
   background-color: var(--clr-neutral-100);
   border-radius: 8px;
   padding: 10px;
+  min-height: 150px;
 }
 
+.extension img {
+  width: 48px;
+}
+
+.extension-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1; /* Allows top to grow so all extensions remain same size */
+}
 .extension-info {
   display: flex;
-
-  margin-bottom: 10px;
-  gap: 1rem;
-  img {
-    width: 40px;
-  }
-}
-.extension-info-text {
-  display: grid;
+  flex-direction: column;
   gap: 0.5rem;
 }
 .extension-btns {
   display: flex;
-
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
 }
-
 .btn-remove {
   border: none;
   background-color: var(--clr-red-700);

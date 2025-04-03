@@ -20,11 +20,13 @@ window.onload = async function getData() {
       extensionsDiv.innerHTML =
         extensionsDiv.innerHTML +
         '<div class="extension">' +
-        '<div class="extension-info">' +
+        '<div class="extension-top">' +
+        '<div class="extension-img">' +
         "<img src=" +
         data.logo +
         ' alt="">' +
-        '<div class="extension-info-text">' +
+        "</div>" +
+        '<div class="extension-info">' +
         "<h3>" +
         data.name +
         "</h3>" +
@@ -32,7 +34,7 @@ window.onload = async function getData() {
         data.description +
         "</p>" +
         "</div>" +
-        " </div>" +
+        "</div>" +
         '<div class="extension-btns">' +
         '<button class="btn-remove">Remove</button>' +
         '<label class="switch">' +
